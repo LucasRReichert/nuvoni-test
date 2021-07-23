@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useHistory } from "react-router-dom";
 
 import Input from '../../components/Input'
@@ -13,37 +13,36 @@ interface DashboardInterface {
     setActivitys:(dados: FormInterface[]) => void,
 }
 
-const Dashboard: React.FC<DashboardInterface>
- = (activitys, setActivitys) => { 
+const Dashboard = ({setActivitys, activitys}: DashboardInterface): JSX.Element => {
 
     const [name, setName] = useState<string>('')
     const [initialDate, setInitialDate] = useState<string>('')
     const [finalDate, setFinalDate] = useState<string>('')
+    const [initialHour, setInitialHour] = useState<string>('')
+    const [finalHour, setFinalHour] = useState<string>('')
 
     const history = useHistory()
 
     const addActivity = () => {
-        setActivitys([
-            {
-                name,
-                initialDate,
-                finalDate
-            }
-        ])
-        localStorage.setItem('@teste-nuvoni:info', JSON.stringify(activitys))
+
+        let getActivitys = activitys
+
+        getActivitys.push({
+            name,
+            initialDate,
+            finalDate,
+            finalHour,
+            initialHour
+        })
+        setActivitys(getActivitys)
+      let newActivitys = JSON.stringify({activitys})
+        localStorage.setItem('@teste-nuvoni:info', newActivitys)
         alert('Adicionado com Sucesso')
     }
 
     const visualizeActivitys = () => {
         history.push("/historico")
     }
-
-    useEffect(() => {
-        console.log(activitys)
-
-        return () => {
-        }
-    }, [activitys])
 
     return (
         <Content>
@@ -59,26 +58,43 @@ const Dashboard: React.FC<DashboardInterface>
             />
         </Container>
         <Container>
-        <h3>Data Início Horário Início</h3>
+        <h3>Data Início</h3>
             <Input
                 required
-                type="datetime-local"
+                type="datetime"
                 placeholder="Data Início"
-                id="initialDateHour"
+                id="initialDate"
                 value={initialDate}
                 onChange={(e) => setInitialDate(e.target.value)}
             />
         </Container>
         <Container>
-        <h3>Data Término Horário Término</h3>
+        <h3>Data Término</h3>
              <Input
                 required
-                type="datetime-local"
+                type="datetime"
                 placeholder="Data Término"
-                id="finalDateHour"
+                id="finalDate"
                 value={finalDate}
                 onChange={(e) => setFinalDate(e.target.value)}
             />
+        <h3>Horário Término</h3>
+             <Input
+                required
+                type="time"
+                placeholder="Horário Início"
+                id="finalHour"
+                value={initialHour}
+                onChange={(e) => setInitialHour(e.target.value)}
+            /><h3>Horário Término</h3>
+            <Input
+               required
+               type="time"
+               placeholder="Horário Término"
+               id="finalHour"
+               value={finalHour}
+               onChange={(e) => setFinalHour(e.target.value)}
+           />
         </Container>
             <Button onClick={addActivity}>Adicionar</Button>
             <Button onClick={visualizeActivitys}>Visualizar Atividades</Button>

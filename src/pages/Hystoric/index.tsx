@@ -6,25 +6,18 @@ import Button from '../../components/Button'
 
 import {FormInterface} from '../../interfaces'
 
-import { Container, Content } from './styles'
+import { Content } from './styles'
 
-interface HystoricInterface {
-    activitys: FormInterface[],
-    setActivitys:(dados: FormInterface[]) => void,
-}
-
-const Hystoric: React.FC<HystoricInterface> = (activitys) => {
+const Hystoric = ({activitys}: any): JSX.Element => {
     let history = useHistory();
     const handleGoBack = () => {
         history.goBack()
     }
 
-    const teste = activitys
-
     return (
-        teste.activitys.map(e => {
+        <>
+        {activitys.map((e:FormInterface) => (
             <Content>
-            <Container>
                 <h3>Nome da Atividade</h3>
                 <Input
                     required
@@ -33,24 +26,19 @@ const Hystoric: React.FC<HystoricInterface> = (activitys) => {
                     id="activityName"
                     value={e.name}
                 />
-            </Container>
-            <Container>
             <h3>Horas gastas por dia</h3>
                 <Input
                     required
                     type="text"
-                    placeholder="Informe"
+                    placeholder="Horas Gastas"
                     id="initialDateHour"
-                    value={Number(e.finalDate) - Number(e.initialDate)}
+                    value={parseFloat(e.finalHour) - parseFloat(e.initialHour)}
                 />
-            </Container>
-            <Container>
-            </Container>
-                <Button onClick={handleGoBack}> Voltar </Button>
             </Content>
-        })
-      
-    )
+       ))}
+       <Button style={{'marginLeft': '10px'}} onClick={handleGoBack}> Voltar </Button>
+       </>
+        )
 }
 
 export default Hystoric;
